@@ -1,20 +1,24 @@
 package kz.lookastana.lookastanaproject.object;
 
+import android.net.Uri;
+
 public class Organization {
 
     private String _orgName;
     private String _orgPhone;
     private String _orgEmail;
     private String _orgAddress;
+    private Uri _orgLogoUri;
 
     public Organization() {
     }
 
-    public Organization(String orgName, String orgPhone, String orgEmail, String orgAddress) {
+    public Organization(String orgName, String orgPhone, String orgEmail, String orgAddress, Uri orgLogoUri) {
         _orgName = orgName;
         _orgPhone = orgPhone;
         _orgEmail = orgEmail;
         _orgAddress = orgAddress;
+        _orgLogoUri = orgLogoUri;
     }
 
     public String getOrgName() {
@@ -47,5 +51,13 @@ public class Organization {
 
     public void setOrgAddress(String orgAddress) {
         _orgAddress = orgAddress;
+    }
+
+    public Uri getOrgLogoUri() {
+        return _orgLogoUri;
+    }
+
+    public void setOrgLogoUri(Uri orgLogoUri) {
+        _orgLogoUri = orgLogoUri;
     }
 }

@@ -2,6 +2,7 @@ package kz.lookastana.lookastanaproject.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +29,7 @@ public class MainActivity extends Activity {
     ImageView organizationLogoImgView;
     ListView organizationListView;
     List<Organization> organizations = new ArrayList<Organization>();
+    Uri logoUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class MainActivity extends Activity {
                 String phone = phoneTxt.getText().toString();
                 String email = emailTxt.getText().toString();
                 String address = addressTxt.getText().toString();
-                addOrganization(name, phone, email, address);
+                organizations.add(new Organization(name, phone, email, address, logoUri));
                 populateList();
                 Toast.makeText(getApplicationContext(), name + " успешно добавлена в Список организаций!", Toast.LENGTH_SHORT).show();
             }
@@ -101,6 +103,7 @@ public class MainActivity extends Activity {
     public void onActivityResult(int reqCode, int resCode, Intent data){
         if (resCode == RESULT_OK){
             if (reqCode == 1){
+                logoUri = data.getData();
                 organizationLogoImgView.setImageURI(data.getData());
             }
         }
@@ -109,10 +112,6 @@ public class MainActivity extends Activity {
     private void populateList(){
         ArrayAdapter<Organization> adapter = new OrganizationListAdapter();
         organizationListView.setAdapter(adapter);
-    }
-
-    private void addOrganization(String orgName, String orgPhone, String orgEmail, String orgAddress){
-        organizations.add(new Organization(orgName, orgPhone, orgEmail, orgAddress));
     }
 
     private class OrganizationListAdapter extends ArrayAdapter<Organization> {
@@ -137,7 +136,8 @@ public class MainActivity extends Activity {
             email.setText(currentOrganization.getOrgEmail());
             TextView address = (TextView) view.findViewById(R.id.orgAddress);
             address.setText(currentOrganization.getOrgAddress());
-
+            ImageView ivOrganizationLogo = (ImageView) view.findViewById(R.id.ivOrgLogo);
+            ivOrganizationLogo.setImageURI(currentOrganization.getOrgLogoUri());
             return view;
 
         }

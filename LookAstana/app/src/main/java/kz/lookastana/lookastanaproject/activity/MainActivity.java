@@ -1,6 +1,7 @@
 package kz.lookastana.lookastanaproject.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import kz.lookastana.lookastanaproject.object.Organization;
 public class MainActivity extends Activity {
 
     EditText nameTxt, phoneTxt, emailTxt, addressTxt;
+    ImageView organizationLogoImgView;
     ListView organizationListView;
     List<Organization> organizations = new ArrayList<Organization>();
 
@@ -35,6 +38,7 @@ public class MainActivity extends Activity {
         phoneTxt = (EditText) findViewById(R.id.txtOrgPhone);
         emailTxt = (EditText) findViewById(R.id.txtOrgEmail);
         addressTxt = (EditText) findViewById(R.id.txtOrgAddress);
+        organizationLogoImgView = (ImageView) findViewById(R.id.imgViewOrgLogo);
         organizationListView = (ListView) findViewById(R.id.orgListView);
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
 
@@ -82,6 +86,24 @@ public class MainActivity extends Activity {
             }
         });
 
+        organizationLogoImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Выберите Логотип Организации"), 1);
+            }
+        });
+
+    }
+
+    public void onActivityResult(int reqCode, int resCode, Intent data){
+        if (resCode == RESULT_OK){
+            if (reqCode == 1){
+                organizationLogoImgView.setImageURI(data.getData());
+            }
+        }
     }
 
     private void populateList(){

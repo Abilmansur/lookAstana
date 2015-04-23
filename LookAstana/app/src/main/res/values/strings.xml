@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">LookAstana</string>
+    <string name="orgCreatorTitle">Добавление организации</string>
+    <string name="orgListTitle">Список организаций</string>
+    <string name="orgName">Наименование организации</string>
+    <string name="orgPhone">Телефон организации</string>
+    <string name="orgEmail">E-mail организации</string>
+    <string name="orgAddress">Адрес организации</string>
+    <string name="btnAdd">Добавить организацию</string>
 </resources>

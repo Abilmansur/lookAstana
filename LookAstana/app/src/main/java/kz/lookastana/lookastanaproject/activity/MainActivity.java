@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,7 @@ import kz.lookastana.lookastanaproject.object.Organization;
 public class MainActivity extends Activity {
 
     EditText nameTxt, phoneTxt, emailTxt, addressTxt;
-
+    ListView organizationListView;
     List<Organization> organizations = new ArrayList<Organization>();
 
     @Override
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
         phoneTxt = (EditText) findViewById(R.id.txtOrgPhone);
         emailTxt = (EditText) findViewById(R.id.txtOrgEmail);
         addressTxt = (EditText) findViewById(R.id.txtOrgAddress);
+        organizationListView = (ListView) findViewById(R.id.orgListView);
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
 
         tabHost.setup();
@@ -57,6 +59,7 @@ public class MainActivity extends Activity {
                 String email = emailTxt.getText().toString();
                 String address = addressTxt.getText().toString();
                 addOrganization(name, phone, email, address);
+                populateList();
                 Toast.makeText(getApplicationContext(), name + " успешно добавлена в Список организаций!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -79,6 +82,11 @@ public class MainActivity extends Activity {
             }
         });
 
+    }
+
+    private void populateList(){
+        ArrayAdapter<Organization> adapter = new OrganizationListAdapter();
+        organizationListView.setAdapter(adapter);
     }
 
     private void addOrganization(String orgName, String orgPhone, String orgEmail, String orgAddress){

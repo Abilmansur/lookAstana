@@ -14,8 +14,8 @@ public class Organization {
     public Organization() {
     }
 
-    public Organization(int id, String orgName, String orgPhone, String orgEmail, String orgAddress, Uri orgLogoUri) {
-        _id = id;
+    public Organization(int orgId, String orgName, String orgPhone, String orgEmail, String orgAddress, Uri orgLogoUri) {
+        _id = orgId;
         _orgName = orgName;
         _orgPhone = orgPhone;
         _orgEmail = orgEmail;

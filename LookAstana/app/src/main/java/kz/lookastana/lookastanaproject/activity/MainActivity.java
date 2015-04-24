@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kz.lookastana.lookastanaproject.R;
+import kz.lookastana.lookastanaproject.database.DatabaseHandler;
 import kz.lookastana.lookastanaproject.object.Organization;
 
 public class MainActivity extends Activity {
@@ -29,7 +30,8 @@ public class MainActivity extends Activity {
     ImageView organizationLogoImgView;
     ListView organizationListView;
     List<Organization> organizations = new ArrayList<Organization>();
-    Uri logoUri = null;
+    Uri logoUri = Uri.parse("android.resource//kz.lookastana.lookastanaproject/drawable/lookastana.png");
+    DatabaseHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,9 @@ public class MainActivity extends Activity {
         addressTxt = (EditText) findViewById(R.id.txtOrgAddress);
         organizationLogoImgView = (ImageView) findViewById(R.id.imgViewOrgLogo);
         organizationListView = (ListView) findViewById(R.id.orgListView);
+
+        dbHandler = new DatabaseHandler(getApplicationContext());
+
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
 
         tabHost.setup();
@@ -60,13 +65,14 @@ public class MainActivity extends Activity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = nameTxt.getText().toString();
-                String phone = phoneTxt.getText().toString();
-                String email = emailTxt.getText().toString();
-                String address = addressTxt.getText().toString();
-                organizations.add(new Organization(0, name, phone, email, address, logoUri));
-                populateList();
-                Toast.makeText(getApplicationContext(), name + " успешно добавлена в Список организаций!", Toast.LENGTH_SHORT).show();
+                Organization organization = new Organization(dbHandler.getOrganizationsCount(), String.valueOf(nameTxt.getText()), String.valueOf(phoneTxt.getText()), String.valueOf(emailTxt.getText()), String.valueOf(addressTxt.getText()),logoUri);
+                if (!orgExists(organization)){
+                    dbHandler.createOrganization(organization);
+                    organizations.add(organization);
+                    Toast.makeText(getApplicationContext(), String.valueOf(nameTxt.getText()) + " успешно добавлена в Список организаций!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(getApplicationContext(), "Ошибка!!! " + String.valueOf(nameTxt.getText()) + " уже есть в Списке организаций!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -79,7 +85,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                addBtn.setEnabled(!nameTxt.getText().toString().trim().isEmpty());
+                addBtn.setEnabled(String.valueOf(nameTxt.getText()).trim().length() > 0);
             }
 
             @Override
@@ -98,6 +104,25 @@ public class MainActivity extends Activity {
             }
         });
 
+        if (dbHandler.getOrganizationsCount() != 0){
+            organizations.addAll(dbHandler.getAllOrganizations());
+        }
+
+        populateList();
+
+    }
+
+    private boolean orgExists(Organization organization){
+        String name = organization.getOrgName();
+        int orgCount = organizations.size();
+
+        for (int i = 0; i < orgCount; i++) {
+            if (name.compareToIgnoreCase(organizations.get(i).getOrgName()) == 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void onActivityResult(int reqCode, int resCode, Intent data){

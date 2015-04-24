@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
                 String phone = phoneTxt.getText().toString();
                 String email = emailTxt.getText().toString();
                 String address = addressTxt.getText().toString();
-                organizations.add(new Organization(name, phone, email, address, logoUri));
+                organizations.add(new Organization(0, name, phone, email, address, logoUri));
                 populateList();
                 Toast.makeText(getApplicationContext(), name + " успешно добавлена в Список организаций!", Toast.LENGTH_SHORT).show();
             }

@@ -4,6 +4,7 @@ import android.net.Uri;
 
 public class Organization {
 
+    private int _id;
     private String _orgName;
     private String _orgPhone;
     private String _orgEmail;
@@ -13,12 +14,21 @@ public class Organization {
     public Organization() {
     }
 
-    public Organization(String orgName, String orgPhone, String orgEmail, String orgAddress, Uri orgLogoUri) {
+    public Organization(int id, String orgName, String orgPhone, String orgEmail, String orgAddress, Uri orgLogoUri) {
+        _id = id;
         _orgName = orgName;
         _orgPhone = orgPhone;
         _orgEmail = orgEmail;
         _orgAddress = orgAddress;
         _orgLogoUri = orgLogoUri;
+    }
+
+    public int getId() {
+        return _id;
+    }
+
+    public void setId(int id) {
+        _id = id;
     }
 
     public String getOrgName() {
